@@ -2,7 +2,7 @@
 ### Data Science Specialisation Track
 ### R Programming
 
-### 10 April 2015
+### 10 May 2015
 
 ### Course Project 1
 
@@ -65,7 +65,7 @@ plot(epcDF$DateTime, epcDF$Global_active_power, type = "n", ylab = "Global Activ
 lines(epcDF$DateTime, epcDF$Global_active_power)
 
 
-dev.copy(png, file = "plot2.png", width = 480, height = 480) ## Copy the plot to a PNG file
+dev.copy(png, file = "plot2.png", width = 480, height = 480, units = "px") ## Copy the plot to a PNG file
 dev.off() ## close the PNG device
 
 

@@ -7,7 +7,7 @@
 ### Course Project 1
 
 
-### Plot 1 - Global Active Power
+### Plot 4
 
 ### This assignment uses data from the UC Irvine Machine Learning Repository, a popular repository for machine learning
 ### datasets. In particular, we will be using the “Individual household electric power consumption Data Set” which is 
@@ -47,7 +47,7 @@ classes <- c("character", "character", "numeric", "numeric", "numeric", "numeric
 ### The sampling rate is every minute, 1440 samples per day (from 01/02/2007); therefore two days requires reading
 ### 2880 samples
 epcDF <- fread("./data/household_power_consumption.txt", sep = ";", skip = "1/2/2007", nrows = 2880,
-                       colClasses = classes, na.strings = c("?")) 
+               colClasses = classes, na.strings = c("?")) 
 
 ### Assign the column names to vector colNames
 colNames <- c("Date", "Time", "Global_active_power", "Global_reactive_power", "Voltage", "Global_intensity", 
@@ -59,14 +59,30 @@ setnames(epcDF, colNames) ## Set Column Names in the dataset
 epcDF$DateTime <- as.POSIXct(paste(epcDF$Date, epcDF$Time), format = "%d/%m/%Y %H:%M:%S")
 
 
-### Histogram of the Global Active power
-hist(epcDF$Global_active_power, col = "red", main = "Global Active Power", xlab = "Global Active Power (kilowatts)")
+### Plot Days and Global Active Power - smooth line through the data points
 
-dev.copy(png, file = "plot1.png", width = 480, height = 480, units = "px") ## Copy the plot to a PNG file
+par(mfrow = c(2, 2))  ## use mfrow equal to two rows and two columns
+
+with(epcDF, {
+        ### Create plot 1 - row = 1, col = 1
+        plot(epcDF$DateTime, epcDF$Global_active_power, xlab = "", ylab = "Global Active Power", type = "l")
+        
+        ### Create plot 2 - row = 1, col = 2
+        plot(epcDF$DateTime, epcDF$Voltage, xlab = "datetime", ylab = "Voltage", type = "l")
+        
+        ### Create plot 3 - row = 2, col = 1
+        plot(epcDF$DateTime, epcDF$Sub_metering_1, type = "l", xlab = "", ylab = "Energy sub metering", col = "black")
+        lines(epcDF$DateTime, epcDF$Sub_metering_2, type = "l", col = "red")
+        lines(epcDF$DateTime, epcDF$Sub_metering_3, type = "l", col = "blue")
+        legend("topright", lty = "solid", col = c("black", "red", "blue"),
+               legend = c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"))
+        
+        ### Create plot 4 - row = 2, col = 2
+        plot(epcDF$DateTime, epcDF$Global_reactive_power, xlab = "datetime", ylab = "Global_reactive_power", type = "l")
+})
+
+dev.copy(png, file = "plot4.png") ## Copy the plot to a PNG file
 dev.off() ## close the PNG device
-
-
-
 
 
 
